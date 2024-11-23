@@ -1,0 +1,43 @@
+name: asthma_alert
+description: "A Smart Asthma Patient Management System that integrates smoke sensor technologies"
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.4
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  google_maps_flutter: ^2.10.0 # Use the latest compatible version
+  cloud_firestore: ^5.5.0 # Use the latest compatible version
+  firebase_core: ^3.8.0 # Required for Firebase
+  geolocator: ^13.0.2 # For real-time location tracking
+  firebase_auth: ^5.3.3
+  flutter_local_notifications: ^18.0.1
+  provider: ^6.1.2
+  google_sign_in: ^6.2.2
+  charts_flutter: ^0.12.0
+  url_launcher: ^6.3.1
+  cupertino_icons: ^1.0.8 # Optional, but commonly included
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^4.0.0
+
+
+flutter:
+
+
+  uses-material-design: true
+
+
