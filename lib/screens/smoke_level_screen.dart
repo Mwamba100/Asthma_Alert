@@ -1,5 +1,3 @@
-// lib/screens/smoke_level_screen.dart
-
 import 'package:flutter/material.dart';
 import '../modules/smoke_detector.dart';
 

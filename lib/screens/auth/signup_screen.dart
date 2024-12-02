@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:provider/provider.dart';
-import '../../providers/auth_provider.dart';
+import '../../providers/auth_provider.dart' as customAuthProvider;
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -38,9 +38,10 @@ class _SignupScreenState extends State<SignupScreen> {
       try {
         // Firebase authentication
         UserCredential userCredential = await FirebaseAuth.instance
-            .createUser WithEmailAndPassword(
-            email: emailController.text.trim(),
-            password: passwordController.text.trim());
+            .createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
 
         // Get FCM token
         String? token = await FirebaseMessaging.instance.getToken();
@@ -70,9 +71,13 @@ class _SignupScreenState extends State<SignupScreen> {
             .doc(userCredential.user!.uid)
             .set(userData);
 
-        // Optionally, you can trigger the AuthProvider signup method if needed
-        final authProvider = Provider.of<AuthProvider>(context, listen: false);
-        authProvider.signup(userData);
+        // Using customAuthProvider alias here
+        final authProvider = Provider.of<customAuthProvider.AuthProvider>(context, listen: false);
+        authProvider.signup(
+          emailController.text.trim(),
+          passwordController.text.trim(),
+          userData as String,
+        );
 
         // Navigate to home screen
         Navigator.pushReplacementNamed(context, '/home');
@@ -126,7 +131,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                    if (!RegExp(r'\S+@\S+\.\S+ ').hasMatch(value)) {
+                    if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
                       return 'Please enter a valid email';
                     }
                     return null;

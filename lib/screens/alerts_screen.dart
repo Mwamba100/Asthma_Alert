@@ -1,5 +1,3 @@
-// lib/screens/alerts_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -23,14 +21,17 @@ class _AlertsScreenState extends State<AlertsScreen> {
   void _initializeNotifications() {
     // Initialization settings for notifications (Android, iOS)
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const InitializationSettings initializationSettings = InitializationSettings(
+
+    final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
+
     flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onSelectNotification: (String? payload) async {
-        if (payload != null) {
-          debugPrint('Notification payload: $payload');
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        if (response.payload != null && response.payload!.isNotEmpty) {
+          debugPrint('Notification payload: ${response.payload}');
+          // Handle notification tap here
         }
       },
     );

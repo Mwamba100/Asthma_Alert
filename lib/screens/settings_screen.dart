@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../modules/health_data.dart';
 import '../services/firestore_service.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -44,8 +45,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           if (snapshot.hasData && snapshot.data!.exists) {
             final settings = snapshot.data!.data()!;
             notificationsEnabled = settings['notificationsEnabled'] ?? true;
-            criticalAlertsEnabled =
-                settings['criticalAlertsEnabled'] ?? true;
+            criticalAlertsEnabled = settings['criticalAlertsEnabled'] ?? true;
             dataSyncEnabled = settings['dataSyncEnabled'] ?? true;
             darkModeEnabled = settings['darkModeEnabled'] ?? false;
           }
@@ -225,155 +225,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             ],
-          ),
-        );
-      }
-
-      void _updateSettings(Map<String, dynamic> settings) {
-        _firestoreService.updateSettings(userId, settings);
-      }
-    }
-    ```
-
----
-
-## **8. Implementing Firestore for Other Data (e.g., Health Data, Settings)**
-
-Ensure each screen that requires data storage interacts with Firestore appropriately. Below are examples of integrating Firestore with other screens.
-
-### **Example: Updating `smoke_level_screen.dart`**
-
-Modify `SmokeLevelScreen` to store and retrieve smoke level data from Firestore.
-
-```dart
-// lib/screens/smoke_level_screen.dart
-
-import 'package:flutter/material.dart';
-import '../modules/smoke_detector.dart';
-import '../services/firestore_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-class SmokeLevelScreen extends StatefulWidget {
-  final SmokeDetector smokeDetector;
-  const SmokeLevelScreen({Key? key, required this.smokeDetector}) : super(key: key);
-
-  @override
-  _SmokeLevelScreenState createState() => _SmokeLevelScreenState();
-}
-
-class _SmokeLevelScreenState extends State<SmokeLevelScreen> {
-  double _currentSmokeLevel = 0.0;
-  bool _isAlertActive = false;
-  final FirestoreService _firestoreService = FirestoreService();
-  late String userId;
-
-  @override
-  void initState() {
-    super.initState();
-    userId = FirebaseAuth.instance.currentUser!.uid;
-    widget.smokeDetector.startSmokeLevelSimulation();
-    // Listen to smoke level updates
-    widget.smokeDetector.smokeLevelStream.listen((level) {
-      setState(() {
-        _currentSmokeLevel = level;
-        _isAlertActive = _currentSmokeLevel > widget.smokeDetector.smokeThreshold;
-      });
-      // Save smoke level to Firestore
-      _firestoreService.addSmokeLevel(userId, _currentSmokeLevel);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Smoke Level Monitoring'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'Current Smoke Level: ${_currentSmokeLevel.toStringAsFixed(2)} μg/m³',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            LinearProgressIndicator(
-              value: _currentSmokeLevel / 150, // Assuming 150 is the max level
-              minHeight: 20,
-              backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation<Color>(
-                  _currentSmokeLevel > 50 ? Colors.red : Colors.green),
-            ),
-            const SizedBox(height: 20),
-            _isAlertActive
-                ? Column(
-                    children: [
-                      const Text(
-                        'Warning! High Smoke Level Detected!',
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: _resetAlert,
-                        child: const Text('Acknowledge Alert'),
-                      ),
-                    ],
-                  )
-                : const Text(
-                    'Smoke levels are safe.',
-                    style: TextStyle(color: Colors.green, fontSize: 18),
-                  ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _refreshSmokeLevel,
-              child: const Text('Refresh Smoke Level'),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: StreamBuilder<List<HealthData>>(
-                stream: _firestoreService.getHealthData(userId),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return const Center(child: Text('Error loading data.'));
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  final data = snapshot.data!;
-                  if (data.isEmpty) {
-                    return const Center(child: Text('No smoke level data available.'));
-                  }
-                  return ListView.builder(
-                    itemCount: data.length,
-                    itemBuilder: (context, index) {
-                      final healthData = data[index];
-                      return ListTile(
-                        title: Text(
-                            'Smoke Level: ${healthData.peakFlow} μg/m³, Time: ${healthData.timestamp}'),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 
-  void _resetAlert() {
-    setState(() {
-      _isAlertActive = false;
-    });
-  }
-
-  void _refreshSmokeLevel() {
-    widget.smokeDetector.startSmokeLevelSimulation();
+  void _updateSettings(Map<String, dynamic> settings) {
+    _firestoreService.updateSettings(userId, settings);
   }
 }

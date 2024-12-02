@@ -1,5 +1,3 @@
-// lib/screens/app_drawer.dart
-
 import 'package:flutter/material.dart';
 import 'package:asthma_alert/screens/auth/login_screen.dart';
 import 'package:asthma_alert/screens/auth/signup_screen.dart';
@@ -34,21 +32,30 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.home),
             title: const Text('Home'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/home');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
             },
           ),
           ListTile(
             leading: const Icon(Icons.login),
             title: const Text('Login'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/login');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
             },
           ),
           ListTile(
             leading: const Icon(Icons.person_add),
             title: const Text('Sign Up'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/signup');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => const SignupScreen()),
+              );
             },
           ),
           ExpansionTile(
@@ -60,7 +67,9 @@ class AppDrawer extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const AsthmaActionPlanScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const AsthmaActionPlanScreen(),
+                    ),
                   );
                 },
               ),
@@ -69,7 +78,9 @@ class AppDrawer extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const CommunitySupportScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const CommunitySupportScreen(),
+                    ),
                   );
                 },
               ),
@@ -78,7 +89,9 @@ class AppDrawer extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const EducationMaterialsScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => EducationMaterialsScreen(),
+                    ),
                   );
                 },
               ),
@@ -87,7 +100,9 @@ class AppDrawer extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const InhalerGuidesScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const InhalerGuidesScreen(),
+                    ),
                   );
                 },
               ),
@@ -96,7 +111,9 @@ class AppDrawer extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ResourceScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const ResourceScreen(),
+                    ),
                   );
                 },
               ),
@@ -135,3 +152,4 @@ class AppDrawer extends StatelessWidget {
     );
   }
 }
+
