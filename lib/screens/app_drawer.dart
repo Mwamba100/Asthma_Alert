@@ -6,14 +6,15 @@ import 'package:asthma_alert/screens/resource/community_support.dart';
 import 'package:asthma_alert/screens/resource/education_materials.dart';
 import 'package:asthma_alert/screens/resource/inhaler_guides.dart';
 import 'package:asthma_alert/screens/resource/resource_screen.dart';
+import 'package:flutter_local_notifications/src/flutter_local_notifications_plugin.dart';
 import 'home_screen.dart';
-import 'smoke_level_screen.dart';
-import 'alerts_screen.dart';
-import 'health_data_screen.dart';
-import 'settings_screen.dart';
+
 
 class AppDrawer extends StatelessWidget {
-  const AppDrawer({Key? key}) : super(key: key);
+  const AppDrawer({Key? key, required this.flutterLocalNotificationsPlugin})
+      : super(key: key);
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,11 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(
+                      flutterLocalNotificationsPlugin:
+                      flutterLocalNotificationsPlugin),
+                ),
               );
             },
           ),

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class AlertsScreen extends StatefulWidget {
-  const AlertsScreen({Key? key}) : super(key: key);
+  const AlertsScreen({super.key});
 
   @override
-  _AlertsScreenState createState() => _AlertsScreenState();
+  AlertsScreenState createState() => AlertsScreenState();
 }
 
-class _AlertsScreenState extends State<AlertsScreen> {
+class AlertsScreenState extends State<AlertsScreen> {
   // Initialize the notifications plugin and settings for alerts
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -22,7 +22,7 @@ class _AlertsScreenState extends State<AlertsScreen> {
     // Initialization settings for notifications (Android, iOS)
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
 
-    final InitializationSettings initializationSettings = InitializationSettings(
+    final InitializationSettings initializationSettings = const InitializationSettings(
       android: initializationSettingsAndroid,
     );
 

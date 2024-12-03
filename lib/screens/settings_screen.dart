@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../modules/health_data.dart';
 import '../services/firestore_service.dart';
 
 class SettingsScreen extends StatefulWidget {

@@ -1,3 +1,4 @@
+import 'package:asthma_alert/screens/smoke_level_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:asthma_alert/screens/app_drawer.dart';
 import 'package:asthma_alert/screens/resource/asthma_action_plan.dart';
@@ -8,31 +9,80 @@ import 'package:asthma_alert/screens/alerts_screen.dart';
 import 'package:asthma_alert/screens/health_data_screen.dart';
 import 'package:asthma_alert/screens/resource/resource_screen.dart';
 import 'package:asthma_alert/screens/settings_screen.dart';
-import 'package:asthma_alert/screens/smoke_level_screen.dart';
+import 'package:flutter_local_notifications/src/flutter_local_notifications_plugin.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+import '../modules/smoke_detector.dart';
 
+
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key, required this.flutterLocalNotificationsPlugin})
+      : super(key: key);
+
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
-  Widget build(BuildContext context) {
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> { // _HomeScreenState class
+  @override
+  Widget build(BuildContext context) { // build method inside _HomeScreenState
     final List<Map<String, dynamic>> homeOptions = [
-      {'icon': Icons.smoke_free, 'title': 'Smoke Monitoring', 'screen': SmokeLevelScreen()},
+      {
+        'icon': Icons.smoke_free,
+        'title': 'Smoke Monitoring',
+        'screen': SmokeLevelScreen(
+          smokeDetector: SmokeDetector(
+              widget.flutterLocalNotificationsPlugin), // Access through widget
+          smokeLevel: 0,
+          threshold: 5,
+        ),
+      },
       {'icon': Icons.notifications, 'title': 'Alerts', 'screen': const AlertsScreen()},
-      {'icon': Icons.health_and_safety, 'title': 'Health Data', 'screen': HealthDataScreen()},
-      {'icon': Icons.library_books, 'title': 'Resources', 'screen': const ResourceScreen()},
-      {'icon': Icons.warning, 'title': 'Asthma Action Plan', 'screen': const AsthmaActionPlanScreen()},
-      {'icon': Icons.groups, 'title': 'Community Support', 'screen': const CommunitySupportScreen()},
-      {'icon': Icons.school, 'title': 'Education Materials', 'screen': EducationMaterialsScreen()},
-      {'icon': Icons.medical_services, 'title': 'Inhaler Guides', 'screen': const InhalerGuidesScreen()},
-      {'icon': Icons.settings, 'title': 'Settings', 'screen': const SettingsScreen()},
+      {
+        'icon': Icons.health_and_safety,
+        'title': 'Health Data',
+        'screen': const HealthDataScreen()
+      },
+      {
+        'icon': Icons.library_books,
+        'title': 'Resources',
+        'screen': const ResourceScreen()
+      },
+      {
+        'icon': Icons.warning,
+        'title': 'Asthma Action Plan',
+        'screen': const AsthmaActionPlanScreen()
+      },
+      {
+        'icon': Icons.groups,
+        'title': 'Community Support',
+        'screen': const CommunitySupportScreen()
+      },
+      {
+        'icon': Icons.school,
+        'title': 'Education Materials',
+        'screen': EducationMaterialsScreen()
+      },
+      {
+        'icon': Icons.medical_services,
+        'title': 'Inhaler Guides',
+        'screen': const InhalerGuidesScreen()
+      },
+      {
+        'icon': Icons.settings,
+        'title': 'Settings',
+        'screen': const SettingsScreen()
+      },
     ];
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
       ),
-      drawer: const AppDrawer(),
+      drawer: AppDrawer(
+          flutterLocalNotificationsPlugin:
+          widget.flutterLocalNotificationsPlugin), // Access through widget
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: GridView.builder(
