@@ -7,13 +7,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart'; // Import mockito
+import 'package:flutter_local_notifications/flutter_local_notifications.dart'; // Import for notifications
 
 import 'package:asthma_alert/main.dart';
 
+// Mock class for FlutterLocalNotificationsPlugin
+class MockFlutterLocalNotificationsPlugin extends Mock
+    implements FlutterLocalNotificationsPlugin {}
+
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    // Create a mock instance
+    final mockFlutterLocalNotificationsPlugin = MockFlutterLocalNotificationsPlugin();
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(MyApp(
+        flutterLocalNotificationsPlugin: mockFlutterLocalNotificationsPlugin));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
